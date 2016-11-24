@@ -1,0 +1,25 @@
+---
+- name: code push
+  remote_user: root
+  hosts: "{{environ}}"
+  vars:
+    codepath: "/opt/pyyx_{{name}}"
+  tasks:
+    - name: checkout directory
+      file: path={{codepath}}/{{name}}_releases state=directory mode=0755
+    - name: push code
+      synchronize: src=/opt/jump/{{version}} dest={{codepath}}/{{name}}_releases
+    - name: swich link
+      file: state=link force=true src={{codepath}}/{{name}}_releases/{{version}} dest={{codepath}}/{{name}
+    - name: chown owner to pyyx
+      shell: chown -R pyyx.pyyx /opt/pyyx_{{name}}
+      with_items:
+        - "{{environ}}"
+      when: (item == "pre" or item == "test")
+    - name: reload php
+      shell: kill -USR2 `cat /run/php-fpm.pid`
+    - name: reload supervisord
+      shell: /etc/init.d/supervisord reload
+
+
+
