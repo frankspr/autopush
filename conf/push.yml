@@ -2,8 +2,6 @@
 - name: code push
   remote_user: root
   hosts: "{{environ}}"
-#  vars:
-#    codepath: "/opt/pyyx_{{name}}"
   tasks:
     - name: checkout directory
       file: path=/opt/pyyx_{{name}}/{{name}}_releases state=directory mode=0755

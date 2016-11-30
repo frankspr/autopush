@@ -1,0 +1,11 @@
+---
+- name: rollback 
+  remote_user: root
+  hosts: "{{environ}}"
+  tasks:
+    - name: modify link
+      file: state=link force=true src=/opt/pyyx_{{name}}/{{name}}_releases/{{version}} dest=/opt/pyyx_{{name}}/{{name}}
+#    - name: reload php
+#      shell: kill -USR2 `cat /run/php-fpm.pid`
+#    - name: reload superivisord
+#      shell: /etc/init.d/supervisord reload
